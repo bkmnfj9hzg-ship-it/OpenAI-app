@@ -1,0 +1,571 @@
+<!doctype html>
+<html lang="pl" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#06090d">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="TradeOS AI">
+<title>TradeOS AI</title>
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" href="./icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="./icon-192.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="application-name" content="TradeOS AI">
+
+<style>
+:root{
+  color-scheme:dark;
+  --bg:#06090d;--surface:#0b1118;--surface2:#101924;--surface3:#162231;
+  --line:#1c2a39;--text:#f2f6fa;--muted:#758396;
+  --accent:#67e8b5;--blue:#63b3ff;--red:#ff6e7c;--amber:#ffc86b;
+  --shadow:0 22px 70px rgba(0,0,0,.42);
+  --r:20px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+body{
+  min-height:100vh;
+  background:
+    radial-gradient(600px 360px at 90% -10%,rgba(99,179,255,.08),transparent 60%),
+    radial-gradient(560px 360px at -15% 25%,rgba(103,232,181,.05),transparent 60%),
+    var(--bg);
+}
+.app{max-width:820px;margin:auto;min-height:100vh;padding-bottom:98px}
+.top{
+  position:sticky;top:0;z-index:40;
+  padding:calc(12px + env(safe-area-inset-top)) 15px 12px;
+  display:flex;align-items:center;justify-content:space-between;
+  background:rgba(6,9,13,.84);backdrop-filter:blur(22px);
+  border-bottom:1px solid rgba(255,255,255,.05)
+}
+.brand{display:flex;align-items:center;gap:11px}
+.logo{
+  width:42px;height:42px;border-radius:14px;
+  display:grid;place-items:center;font-weight:950;color:#07110d;
+  background:linear-gradient(135deg,var(--accent),var(--blue));
+  box-shadow:0 10px 26px rgba(99,179,255,.15)
+}
+.brand b{display:block;font-size:17px;letter-spacing:.04em}
+.brand small{display:block;margin-top:2px;color:var(--muted);font-size:10px}
+.online{
+  display:flex;align-items:center;gap:6px;padding:7px 9px;border-radius:999px;
+  border:1px solid #204034;color:var(--accent);font-size:9px;letter-spacing:.1em
+}
+.online i{width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px rgba(103,232,181,.55)}
+main{padding:15px}
+.screen{display:none}.screen.active{display:block}
+.eyebrow{font-size:9px;letter-spacing:.16em;color:#6f8094;text-transform:uppercase}
+h1,h2,h3,p{margin-top:0}
+.view-head{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;margin:5px 0 16px}
+.view-head h1{font-size:31px;letter-spacing:-.055em;margin:5px 0 0}
+.chip{padding:7px 9px;border-radius:999px;border:1px solid var(--line);background:#0a1016;color:#8b99aa;font-size:9px}
+.card{
+  background:linear-gradient(160deg,#0d141c,#090e14);
+  border:1px solid var(--line);border-radius:var(--r);box-shadow:0 14px 36px rgba(0,0,0,.18)
+}
+.hero{padding:20px;overflow:hidden;position:relative}
+.hero:after{
+  content:"";position:absolute;width:180px;height:180px;border-radius:50%;
+  right:-70px;top:-80px;background:radial-gradient(circle,rgba(99,179,255,.15),transparent 65%)
+}
+.hero-top{display:flex;justify-content:space-between;align-items:flex-start;gap:14px}
+.hero-label{font-size:10px;color:var(--muted)}
+.balance{font-size:43px;font-weight:850;letter-spacing:-.06em;margin:7px 0 4px}
+.delta{color:var(--accent);font-size:12px}
+.ring{
+  width:84px;height:84px;border-radius:50%;
+  border:8px solid #152230;border-top-color:var(--accent);border-right-color:var(--blue);
+  display:grid;place-items:center;flex:0 0 auto
+}
+.ring b{font-size:18px}.ring small{display:block;font-size:8px;color:var(--muted);text-align:center}
+.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:14px}
+.metric{padding:11px;border-radius:15px;background:#080d12;border:1px solid #192633}
+.metric span{display:block;color:var(--muted);font-size:9px}
+.metric b{display:block;font-size:15px;margin-top:4px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.module{padding:15px}
+.module h2{font-size:18px;margin:5px 0 0}
+.module-head{display:flex;align-items:start;justify-content:space-between;gap:10px}
+.score{
+  width:52px;height:52px;border-radius:16px;display:grid;place-items:center;
+  background:#0a1613;border:1px solid #1b3d31;color:var(--accent);font-weight:900
+}
+.ai-pick{margin-top:12px;padding:13px;border-radius:16px;background:#081019;border:1px solid #17293a}
+.ai-pick .ticker{font-size:24px;font-weight:900}
+.side{font-size:9px;padding:5px 7px;border-radius:999px;margin-left:6px}
+.side.long{background:#0d2119;color:var(--accent)}.side.short{background:#241217;color:#ff8290}
+.reason{color:#91a0b0;font-size:11px;line-height:1.5;margin-top:8px}
+.mini-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #16212d;font-size:11px}
+.mini-row:last-child{border-bottom:0}.mini-row span{color:#718093}.mini-row b{font-size:11px}
+.chart-card{padding:15px;margin-top:10px}
+canvas{width:100%;height:180px;border-radius:14px;background:linear-gradient(180deg,rgba(99,179,255,.04),transparent)}
+.quick{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.qbtn{
+  border:1px solid var(--line);background:#0b1219;color:#dfe8f0;border-radius:15px;
+  padding:12px 8px;font-size:10px;font-weight:700
+}
+.qbtn strong{display:block;font-size:17px;margin-bottom:3px}
+.scanner-shell{display:grid;gap:10px}
+.filters{padding:14px}
+.form2{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+label{display:grid;gap:6px;color:#748396;font-size:10px}
+input,select,textarea{
+  width:100%;padding:12px;border-radius:12px;border:1px solid #213141;background:#080d12;color:var(--text);outline:none
+}
+input:focus,select:focus,textarea:focus{border-color:#3b6682;box-shadow:0 0 0 3px rgba(99,179,255,.05)}
+.primary,.secondary{
+  border:0;border-radius:14px;padding:12px 14px;font-weight:800
+}
+.primary{background:linear-gradient(135deg,var(--accent),#7cf0ca);color:#06100b}
+.secondary{background:#111a24;color:#e6edf4;border:1px solid #233344}
+.feed{display:grid;gap:9px}
+.signal{padding:14px}
+.signal-top{display:flex;justify-content:space-between;align-items:center}
+.signal .ticker{font-size:21px;font-weight:900}
+.signal-score{font-size:11px;color:var(--accent)}
+.signal-metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:10px}
+.signal-metrics div{padding:8px;border-radius:10px;background:#080d12;text-align:center}
+.signal-metrics span{display:block;color:#667789;font-size:8px}.signal-metrics b{font-size:11px}
+.ai-shell{display:grid;gap:10px}
+.ai-summary{padding:15px}
+.ai-hero{display:flex;gap:12px;align-items:center}
+.ai-orb{
+  width:56px;height:56px;border-radius:18px;background:linear-gradient(135deg,#152b2b,#10203a);
+  border:1px solid #29465b;display:grid;place-items:center;font-weight:900;color:#8cecc7
+}
+.ai-summary p{font-size:12px;color:#8391a2;line-height:1.5;margin:5px 0 0}
+.chat{height:420px;overflow:auto;padding:13px;display:grid;gap:10px;align-content:start}
+.msg{max-width:88%;padding:11px 12px;border-radius:16px;font-size:12px;line-height:1.5}
+.msg.ai{background:#0c151d;border:1px solid #1e3040;color:#dbe6ef}
+.msg.user{margin-left:auto;background:#10231d;border:1px solid #1d4537;color:#d9f7e9}
+.chatbox{display:grid;grid-template-columns:1fr auto;gap:8px;margin-top:10px}
+.chatbox textarea{min-height:48px;max-height:110px;resize:none}
+.chatbox button{width:50px;border-radius:14px}
+.trade-flow{display:grid;gap:10px}
+.step{padding:15px}
+.step-head{display:grid;grid-template-columns:36px 1fr;gap:9px;align-items:start}
+.num{font-size:10px;color:var(--blue);padding-top:4px}
+.step h2{font-size:18px;margin:0 0 12px}
+.calc{margin-top:10px;padding:12px;border-radius:14px;background:#091511;border:1px solid #1f3a31;color:#c8eddd;font-size:11px;line-height:1.5}
+.actions{display:flex;gap:8px;margin-top:10px}.actions button{flex:1}
+.tabs{display:flex;gap:5px;background:#080d12;border:1px solid var(--line);padding:4px;border-radius:14px}
+.tabs button{flex:1;border:0;background:transparent;color:#6f7d8f;padding:9px;border-radius:10px}
+.tabs button.active{background:#131e29;color:#f1f5f8}
+.journal{display:grid;gap:9px;margin-top:10px}
+.tradecard{padding:14px}
+.tradecard .topline{display:flex;justify-content:space-between;gap:10px}
+.tradecard small{color:#718093}
+.empty{padding:26px;text-align:center;color:#657487;border:1px dashed #273746;border-radius:16px}
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.stat-card{padding:14px}.stat-card span{font-size:9px;color:#708093}.stat-card b{display:block;font-size:22px;margin-top:5px}
+.notice{padding:12px;border-radius:14px;border:1px solid #3b3320;background:#15120a;color:#d6bd7d;font-size:10px;line-height:1.5}
+.nav{
+  position:fixed;left:50%;transform:translateX(-50%);bottom:0;z-index:50;width:min(820px,100%);
+  display:grid;grid-template-columns:repeat(6,1fr);gap:3px;
+  padding:8px 8px calc(8px + env(safe-area-inset-bottom));
+  background:rgba(6,9,13,.93);backdrop-filter:blur(22px);border-top:1px solid rgba(255,255,255,.05)
+}
+.nav button{border:0;background:transparent;color:#5f6d7d;padding:7px 2px;border-radius:12px}
+.nav button.active{background:#101923;color:#eef4f8}
+.nav span{display:block;font-size:17px}.nav small{display:block;font-size:8px;margin-top:2px}
+@media(max-width:520px){
+  .metrics{grid-template-columns:1fr 1fr}
+  .grid2{grid-template-columns:1fr}
+  .signal-metrics{grid-template-columns:1fr 1fr}
+  .balance{font-size:38px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="top">
+  <div class="brand">
+    <div class="logo">T</div>
+    <div><b>TradeOS AI</b><small>personal market copilot</small></div>
+  </div>
+  <div class="online"><i></i> LOCAL DEMO</div>
+</header>
+
+<main>
+<section id="home" class="screen active">
+  <div class="view-head">
+    <div><div class="eyebrow">CONTROL CENTER</div><h1>Dashboard</h1></div>
+    <div class="chip">TEST ACCOUNT</div>
+  </div>
+
+  <div class="card hero">
+    <div class="hero-top">
+      <div>
+        <div class="hero-label">Portfolio value</div>
+        <div class="balance" id="balance">1 000,00 zł</div>
+        <div class="delta" id="delta">0,00% od startu</div>
+      </div>
+      <div class="ring"><div><b id="riskScore">A</b><small>RISK</small></div></div>
+    </div>
+    <div class="metrics">
+      <div class="metric"><span>Cash</span><b id="cash">1 000 zł</b></div>
+      <div class="metric"><span>Open</span><b id="openCount">0</b></div>
+      <div class="metric"><span>Trades</span><b id="tradeCount">0</b></div>
+      <div class="metric"><span>Win rate</span><b id="winRate">0%</b></div>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card module">
+      <div class="module-head">
+        <div><div class="eyebrow">AI TOP SETUP</div><h2>Najmocniejszy sygnał</h2></div>
+        <div class="score">87</div>
+      </div>
+      <div class="ai-pick">
+        <div><span class="ticker">PLTR</span><span class="side long">LONG</span></div>
+        <div class="reason">Momentum + podwyższony wolumen + relatywna siła. Przykładowy setup demonstracyjny.</div>
+      </div>
+    </div>
+
+    <div class="card module">
+      <div class="eyebrow">RISK ENGINE</div>
+      <h2>Limity sesji</h2>
+      <div class="mini-row"><span>Risk / trade</span><b>2%</b></div>
+      <div class="mini-row"><span>Max pozycja</span><b>40%</b></div>
+      <div class="mini-row"><span>Max loss</span><b>20 zł</b></div>
+      <div class="mini-row"><span>Status</span><b style="color:var(--accent)">OK</b></div>
+    </div>
+  </div>
+
+  <div class="card chart-card">
+    <div class="module-head"><div><div class="eyebrow">PERFORMANCE</div><h2>Equity curve</h2></div><div class="chip">LOCAL</div></div>
+    <canvas id="chart" width="720" height="230"></canvas>
+  </div>
+
+  <div class="quick">
+    <button class="qbtn" data-go="scanner"><strong>⌕</strong>Scanner</button>
+    <button class="qbtn" data-go="ai"><strong>✦</strong>Ask AI</button>
+    <button class="qbtn" data-go="trade"><strong>＋</strong>New trade</button>
+  </div>
+</section>
+
+<section id="scanner" class="screen">
+  <div class="view-head">
+    <div><div class="eyebrow">MARKET INTELLIGENCE</div><h1>Scanner</h1></div>
+    <button class="primary" id="scanBtn">Scan</button>
+  </div>
+  <div class="notice">To jest wersja demonstracyjna — nie korzysta jeszcze z real-time market data. Później można podpiąć API przez backend/proxy.</div>
+  <div class="card filters" style="margin-top:10px">
+    <div class="form2">
+      <label>RVOL min<input id="fRvol" type="number" value="1.8" step=".1"></label>
+      <label>Momentum 5D %<input id="fMom" type="number" value="8" step="1"></label>
+      <label>Today %<input id="fDay" type="number" value="3" step=".5"></label>
+      <label>ATR max %<input id="fAtr" type="number" value="8" step=".5"></label>
+    </div>
+  </div>
+  <div id="signals" class="feed" style="margin-top:10px"></div>
+</section>
+
+<section id="ai" class="screen">
+  <div class="view-head">
+    <div><div class="eyebrow">AI ANALYST</div><h1>Copilot</h1></div>
+    <div class="chip" id="aiModeChip">VECTOR RAG</div>
+  </div>
+  <div class="ai-shell">
+    <div class="card ai-summary">
+      <div class="ai-hero">
+        <div class="ai-orb">AI</div>
+        <div><b>Market Copilot</b><p>Wyszukiwanie semantyczne przez embeddingi + cosine similarity. Bot dobiera kontekst po znaczeniu, a nie przez proste dopasowanie słów.</p></div>
+      </div>
+    </div>
+    <div class="card module" style="margin-top:10px">
+      <div class="eyebrow">VECTOR BACKEND</div>
+      <div class="mini-row"><span>Retrieval</span><b style="color:var(--accent)">EMBEDDINGS</b></div>
+      <div class="mini-row"><span>API</span><b>/ai · SAME ORIGIN</b></div>
+      <div class="reason" id="backendStatus">Sprawdzam backend…</div>
+    </div>
+    <div class="card chat" id="chat">
+      <div class="msg ai">Cześć. Korzystam z wyszukiwania wektorowego. Dobieram kontekst semantycznie z setupów, reguł ryzyka, watchlisty i journalu.</div>
+    </div>
+    <div class="chatbox">
+      <textarea id="aiInput" placeholder="Np. Dlaczego PLTR ma score 87?"></textarea>
+      <button class="primary" id="aiSend">↑</button>
+    </div>
+  </div>
+</section>
+
+<section id="trade" class="screen">
+  <div class="view-head">
+    <div><div class="eyebrow">TRADE WORKSPACE</div><h1>Build trade</h1></div>
+    <div class="chip">DRAFT</div>
+  </div>
+  <div class="trade-flow">
+    <div class="card step">
+      <div class="step-head"><div class="num">01</div><div><h2>Instrument</h2>
+        <div class="form2">
+          <label>Ticker<input id="ticker" placeholder="AAPL" autocapitalize="characters"></label>
+          <label>Side<select id="side"><option>LONG</option><option>SHORT</option></select></label>
+        </div>
+      </div></div>
+    </div>
+    <div class="card step">
+      <div class="step-head"><div class="num">02</div><div><h2>Levels</h2>
+        <div class="form2">
+          <label>Entry<input id="entry" type="number" step=".01"></label>
+          <label>Stop<input id="stop" type="number" step=".01"></label>
+          <label>TP1<input id="tp1" type="number" step=".01"></label>
+          <label>TP2<input id="tp2" type="number" step=".01"></label>
+        </div>
+      </div></div>
+    </div>
+    <div class="card step">
+      <div class="step-head"><div class="num">03</div><div><h2>Risk</h2>
+        <div class="form2">
+          <label>Risk %<input id="risk" type="number" value="2" step=".1"></label>
+          <label>Max position %<input id="maxPos" type="number" value="40" step="1"></label>
+        </div>
+        <div class="calc" id="calcBox">Uzupełnij entry, stop i TP1.</div>
+        <div class="actions"><button class="secondary" id="calcBtn">Calculate</button><button class="primary" id="saveBtn">Save trade</button></div>
+      </div></div>
+    </div>
+  </div>
+</section>
+
+<section id="journal" class="screen">
+  <div class="view-head">
+    <div><div class="eyebrow">JOURNAL & REVIEW</div><h1>Journal</h1></div>
+    <button class="secondary" id="resetBtn">Reset</button>
+  </div>
+  <div class="stats-grid">
+    <div class="card stat-card"><span>Closed trades</span><b id="closedCount">0</b></div>
+    <div class="card stat-card"><span>Realized P/L</span><b id="realized">0 zł</b></div>
+  </div>
+  <div class="tabs" style="margin-top:10px">
+    <button class="active" data-tab="trades">Trades</button>
+    <button data-tab="watch">Watchlist</button>
+  </div>
+  <div id="tradesPane"><div id="journalList" class="journal"></div></div>
+  <div id="watchPane" style="display:none">
+    <button class="secondary" id="watchBtn" style="width:100%;margin-top:10px">Add demo watchlist</button>
+    <div id="watchlist" class="journal"></div>
+  </div>
+</section>
+
+<section id="stats" class="screen">
+  <div class="view-head"><div><div class="eyebrow">SYSTEM REVIEW</div><h1>Statistics</h1></div><div class="chip">LOCAL</div></div>
+  <div class="stats-grid">
+    <div class="card stat-card"><span>Total trades</span><b id="sTrades">0</b></div>
+    <div class="card stat-card"><span>Win rate</span><b id="sWin">0%</b></div>
+    <div class="card stat-card"><span>Avg win</span><b id="sAvgWin">0 zł</b></div>
+    <div class="card stat-card"><span>Avg loss</span><b id="sAvgLoss">0 zł</b></div>
+  </div>
+  <div class="card module" style="margin-top:10px">
+    <div class="eyebrow">AI REVIEW</div><h2>Co system widzi?</h2>
+    <p class="reason" id="aiReview">Brak wystarczającej liczby zamkniętych transakcji. Zbierz co najmniej kilka wyników.</p>
+  </div>
+  <div class="card module" style="margin-top:10px">
+    <div class="eyebrow">DATA</div><h2>Local-first</h2>
+    <div class="mini-row"><span>Storage</span><b>localStorage</b></div>
+    <div class="mini-row"><span>API</span><b id="statsApiStatus">vector backend</b></div>
+    <div class="mini-row"><span>Broker</span><b>not connected</b></div>
+  </div>
+</section>
+</main>
+
+<nav class="nav">
+  <button class="active" data-go="home"><span>⌂</span><small>HOME</small></button>
+  <button data-go="scanner"><span>⌕</span><small>SCAN</small></button>
+  <button data-go="ai"><span>✦</span><small>AI</small></button>
+  <button data-go="trade"><span>＋</span><small>TRADE</small></button>
+  <button data-go="journal"><span>▤</span><small>JOURNAL</small></button>
+  <button data-go="stats"><span>∿</span><small>STATS</small></button>
+</nav>
+</div>
+
+<script>
+const KEY="tradeos_ai_demo_v1";
+const initial={start:1000,balance:1000,trades:[],watch:[]};
+let state=JSON.parse(localStorage.getItem(KEY)||JSON.stringify(initial));
+const q=s=>document.querySelector(s),qa=s=>[...document.querySelectorAll(s)];
+const money=n=>Number(n||0).toLocaleString("pl-PL",{minimumFractionDigits:2,maximumFractionDigits:2})+" zł";
+function save(){localStorage.setItem(KEY,JSON.stringify(state));render();}
+function go(id){
+  qa(".screen").forEach(x=>x.classList.remove("active")); q("#"+id).classList.add("active");
+  qa("[data-go]").forEach(x=>x.classList.toggle("active",x.dataset.go===id));
+  window.scrollTo({top:0,behavior:"instant"});
+}
+qa("[data-go]").forEach(b=>b.onclick=()=>go(b.dataset.go));
+
+function metrics(){
+  const closed=state.trades.filter(t=>t.status!=="OPEN");
+  const wins=closed.filter(t=>t.pnl>0);
+  const losses=closed.filter(t=>t.pnl<0);
+  const realized=closed.reduce((a,t)=>a+t.pnl,0);
+  return {
+    closed,wins,losses,realized,
+    winRate:closed.length?wins.length/closed.length*100:0,
+    avgWin:wins.length?wins.reduce((a,t)=>a+t.pnl,0)/wins.length:0,
+    avgLoss:losses.length?losses.reduce((a,t)=>a+t.pnl,0)/losses.length:0
+  }
+}
+function render(){
+  const m=metrics();
+  q("#balance").textContent=money(state.balance);
+  q("#cash").textContent=money(state.balance);
+  q("#openCount").textContent=state.trades.filter(t=>t.status==="OPEN").length;
+  q("#tradeCount").textContent=state.trades.length;
+  q("#winRate").textContent=Math.round(m.winRate)+"%";
+  q("#delta").textContent=((state.balance/state.start-1)*100).toFixed(2).replace(".",",")+"% od startu";
+  q("#closedCount").textContent=m.closed.length;
+  q("#realized").textContent=money(m.realized);
+  q("#sTrades").textContent=state.trades.length;
+  q("#sWin").textContent=Math.round(m.winRate)+"%";
+  q("#sAvgWin").textContent=money(m.avgWin);
+  q("#sAvgLoss").textContent=money(m.avgLoss);
+  q("#riskScore").textContent=state.trades.filter(t=>t.status==="OPEN").length<=2?"A":"B";
+  q("#aiReview").textContent=m.closed.length<5
+    ?"Brak wystarczającej próbki. Zamknij kilka transakcji, żeby system mógł wskazać wzorce."
+    : m.winRate>=55
+      ?"Win rate wygląda zdrowo. Sprawdź teraz, czy średnia strata nie rośnie szybciej niż średni zysk."
+      :"Win rate jest poniżej 55%. Warto przejrzeć setupy i sprawdzić, czy nie wchodzisz za późno.";
+  renderJournal();renderWatch();drawChart();
+}
+function calcTrade(){
+  const e=+q("#entry").value,s=+q("#stop").value,tp=+q("#tp1").value,r=+q("#risk").value/100,maxP=+q("#maxPos").value/100;
+  if(!e||!s||!tp||e===s){q("#calcBox").textContent="Uzupełnij poprawnie entry, stop i TP1.";return null}
+  const riskCash=state.balance*r,riskPer=Math.abs(e-s);
+  const qtyRisk=riskCash/riskPer,qtyMax=(state.balance*maxP)/e;
+  const qty=Math.floor(Math.max(0,Math.min(qtyRisk,qtyMax))*100)/100;
+  const pos=qty*e,loss=qty*riskPer,rr=Math.abs(tp-e)/riskPer;
+  q("#calcBox").innerHTML=`Position <b>${money(pos)}</b><br>Qty <b>${qty}</b><br>Max loss <b>${money(loss)}</b><br>R:R <b>1:${rr.toFixed(2)}</b>`;
+  return {qty,pos,loss,rr};
+}
+q("#calcBtn").onclick=calcTrade;
+q("#saveBtn").onclick=()=>{
+  const c=calcTrade();if(!c)return;
+  state.trades.unshift({
+    id:Date.now(),ticker:(q("#ticker").value||"TEST").toUpperCase(),side:q("#side").value,
+    entry:+q("#entry").value,stop:+q("#stop").value,tp1:+q("#tp1").value,tp2:+q("#tp2").value||null,
+    qty:c.qty,status:"OPEN",pnl:0,date:new Date().toLocaleString("pl-PL")
+  });
+  save();go("journal");
+}
+function closeTrade(id,outcome){
+  const t=state.trades.find(x=>x.id===id);if(!t||t.status!=="OPEN")return;
+  const exit=outcome==="TP"?t.tp1:t.stop,dir=t.side==="LONG"?1:-1;
+  t.pnl=(exit-t.entry)*t.qty*dir;t.status=outcome;t.exit=exit;state.balance+=t.pnl;save();
+}
+function renderJournal(){
+  const box=q("#journalList");
+  if(!state.trades.length){box.innerHTML='<div class="empty">Brak transakcji.</div>';return}
+  box.innerHTML=state.trades.map(t=>`<div class="card tradecard">
+    <div class="topline"><div><b>${t.ticker}</b> <span class="side ${t.side.toLowerCase()}">${t.side}</span><br><small>${t.date}</small></div>
+    <b>${t.status==="OPEN"?"OPEN":(t.pnl>=0?"+":"")+money(t.pnl)}</b></div>
+    <div class="reason">Entry ${t.entry} • SL ${t.stop} • TP ${t.tp1} • qty ${t.qty}</div>
+    ${t.status==="OPEN"?`<div class="actions"><button class="primary" onclick="closeTrade(${t.id},'TP')">TP</button><button class="secondary" onclick="closeTrade(${t.id},'SL')">SL</button></div>`:""}
+  </div>`).join("");
+}
+qa("[data-tab]").forEach(b=>b.onclick=()=>{
+  qa("[data-tab]").forEach(x=>x.classList.toggle("active",x===b));
+  q("#tradesPane").style.display=b.dataset.tab==="trades"?"block":"none";
+  q("#watchPane").style.display=b.dataset.tab==="watch"?"block":"none";
+});
+q("#watchBtn").onclick=()=>{state.watch=[{t:"NVDA",note:"AI infrastructure"},{t:"PLTR",note:"relative strength"},{t:"AMD",note:"momentum watch"}];save();}
+function renderWatch(){
+  q("#watchlist").innerHTML=state.watch.length?state.watch.map(x=>`<div class="card tradecard"><b>${x.t}</b><div class="reason">${x.note}</div></div>`).join(""):'<div class="empty">Watchlista pusta.</div>';
+}
+q("#resetBtn").onclick=()=>{if(confirm("Usunąć dane testowe?")){localStorage.removeItem(KEY);location.reload()}};
+
+const demo=[
+ {t:"PLTR",side:"LONG",score:87,r:3.2,m:14.8,d:5.4,a:5.7},
+ {t:"NVDA",side:"LONG",score:82,r:2.7,m:12.1,d:4.2,a:4.9},
+ {t:"AMD",side:"LONG",score:76,r:2.1,m:9.6,d:3.4,a:5.2},
+ {t:"RIVN",side:"SHORT",score:71,r:2.4,m:10.5,d:4.1,a:7.4},
+ {t:"COIN",side:"SHORT",score:68,r:3.5,m:18.0,d:6.9,a:8.3}
+];
+q("#scanBtn").onclick=()=>{
+  const rv=+q("#fRvol").value,mo=+q("#fMom").value,dy=+q("#fDay").value,at=+q("#fAtr").value;
+  const out=demo.filter(x=>x.r>=rv&&x.m>=mo&&x.d>=dy&&x.a<=at);
+  q("#signals").innerHTML=out.length?out.map(x=>`<div class="card signal">
+    <div class="signal-top"><div><span class="ticker">${x.t}</span><span class="side ${x.side.toLowerCase()}">${x.side}</span></div><div class="signal-score">AI ${x.score}/100</div></div>
+    <div class="signal-metrics">
+      <div><span>RVOL</span><b>${x.r}</b></div><div><span>MOM 5D</span><b>${x.m}%</b></div>
+      <div><span>TODAY</span><b>${x.d}%</b></div><div><span>ATR</span><b>${x.a}%</b></div>
+    </div></div>`).join(""):'<div class="empty">Brak setupów dla tych filtrów.</div>';
+};
+q("#scanBtn").click();
+
+function vectorDocuments(){
+  const m=metrics();
+  const docs=[
+    {id:"risk-policy",title:"Risk policy",text:`Kapitał ${money(state.balance)}. Domyślny risk per trade 2%. Maksymalna pozycja 40% kapitału. Maksymalna planowana strata przy 2% to ${money(state.balance*.02)}.`},
+    {id:"portfolio",title:"Portfolio metrics",text:`Portfolio: balance ${money(state.balance)}, wszystkich transakcji ${state.trades.length}, zamkniętych ${m.closed.length}, win rate ${Math.round(m.winRate)}%, średni zysk ${money(m.avgWin)}, średnia strata ${money(m.avgLoss)}.`},
+    ...demo.map(x=>({id:`signal-${x.t}`,title:`${x.t} ${x.side}`,text:`Setup ${x.t} ${x.side}. AI score ${x.score}/100. RVOL ${x.r}. Momentum 5D ${x.m}%. Zmiana dzienna ${x.d}%. ATR ${x.a}%.`})),
+    ...state.trades.slice(0,40).map(t=>({id:`trade-${t.id}`,title:`Journal ${t.ticker} ${t.side}`,text:`Transakcja ${t.ticker} ${t.side}. Status ${t.status}. Entry ${t.entry}, stop ${t.stop}, TP1 ${t.tp1}, quantity ${t.qty}, PnL ${money(t.pnl)}. Data ${t.date}.`})),
+    ...state.watch.slice(0,20).map((x,i)=>({id:`watch-${i}`,title:`Watchlist ${x.t}`,text:`Watchlista ${x.t}. Notatka: ${x.note}.`}))
+  ];
+  return docs;
+}
+
+async function syncBackendUI(){
+  const st=q("#backendStatus");
+  try{
+    const r=await fetch("./health",{cache:"no-store"});
+    const data=await r.json();
+    if(!r.ok||!data.ok) throw new Error(data.error||`HTTP ${r.status}`);
+    if(st) st.textContent=`Online · ${data.retrieval} · ${data.embedding_model}`;
+  }catch(err){
+    if(st) st.textContent=`Backend offline: ${err.message}`;
+  }
+}
+
+async function vectorAI(text){
+  const r=await fetch("./ai",{
+    method:"POST",headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({query:text,documents:vectorDocuments()})
+  });
+  const data=await r.json().catch(()=>({}));
+  if(!r.ok) throw new Error(data.error||`Backend HTTP ${r.status}`);
+  return data;
+}
+
+q("#aiSend").onclick=async()=>{
+  const input=q("#aiInput"),text=input.value.trim();if(!text)return;
+  const chat=q("#chat");
+  chat.insertAdjacentHTML("beforeend",`<div class="msg user"></div>`);
+  chat.lastElementChild.textContent=text; input.value="";
+  const d=document.createElement("div");d.className="msg ai";d.textContent="Szukam semantycznie w indeksie wektorowym…";chat.appendChild(d);chat.scrollTop=chat.scrollHeight;
+  try{
+    const data=await vectorAI(text);
+    const match=(data.matches||[]).slice(0,3).map(x=>`${x.title} ${Math.round((x.score||0)*100)}%`).join(" • ");
+    d.textContent=data.answer+(match?`\n\nVector matches: ${match}`:"");
+  }catch(err){
+    d.textContent=`Vector backend: ${err.message}`;
+  }
+  chat.scrollTop=chat.scrollHeight;
+};
+q("#aiInput").addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();q("#aiSend").click()}});
+syncBackendUI();
+
+function drawChart(){
+  const c=q("#chart"),ctx=c.getContext("2d"),w=c.width,h=c.height;
+  ctx.clearRect(0,0,w,h);
+  const vals=[state.start];let v=state.start;
+  [...state.trades].reverse().filter(t=>t.status!=="OPEN").forEach(t=>{v+=t.pnl;vals.push(v)});
+  if(vals.length<2)vals.push(state.balance);
+  const min=Math.min(...vals)*.985,max=Math.max(...vals)*1.015;
+  ctx.strokeStyle="#63b3ff";ctx.lineWidth=4;ctx.beginPath();
+  vals.forEach((x,i)=>{const px=22+i*(w-44)/(vals.length-1),py=h-24-(x-min)/(max-min||1)*(h-48);i?ctx.lineTo(px,py):ctx.moveTo(px,py)});
+  ctx.stroke();
+}
+render();
+</script>
+
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./sw.js").catch(console.error);
+  });
+}
+</script>
+</body>
+</html>
