@@ -1,0 +1,8 @@
+node_modules/**
+.git/**
+worker.js
+wrangler.toml
+package.json
+package-lock.json
+BACKEND_SETUP.md
+README.md
